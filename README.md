@@ -26,4 +26,7 @@ https://drive.google.com/drive/folders/1l6ubLBY7NDxXCIXa-PEhVjF1UPGig7ui?usp=dri
 ## Scripts
 スクリプト群
 
+## StatusText
+未使用
+
 
