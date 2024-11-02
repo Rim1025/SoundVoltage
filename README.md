@@ -19,3 +19,11 @@ https://drive.google.com/drive/folders/1l6ubLBY7NDxXCIXa-PEhVjF1UPGig7ui?usp=dri
 
 ## Scenes
 各シーン
+
+## Score
+スコアの保存場所
+
+## Scripts
+スクリプト群
+
+
