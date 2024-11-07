@@ -20,17 +20,17 @@ namespace InGame.Score
             switch (type)
             {
                 case JudgeType.Perfect:
-                    Debug.Log("Perfect");
+                    //Debug.Log("Perfect");
                     _subject.OnNext("Perfect");
                     _score += Defaults.ConstPerfectScore * rate;
                     break;
                 case JudgeType.Good:
-                    Debug.Log("Good");
+                    //Debug.Log("Good");
                     _subject.OnNext("Good");
                     _score += Defaults.ConstGoodScore * rate;
                     break;
                 case JudgeType.Miss:
-                    Debug.Log("Miss");
+                    //Debug.Log("Miss");
                     _subject.OnNext("Miss");
                     _score += Defaults.ConstMissScore * rate;
                     break;
