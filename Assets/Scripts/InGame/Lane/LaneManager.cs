@@ -65,7 +65,6 @@ namespace InGame
                                 Debug.Log("終了");
                                 // 終了
                                 Invoke(nameof(End), 5);
-                                ErrDisplay.ViewErr("終了");
                                 _disposable.Dispose();
                             }
                             else if (_notes <= 2)
