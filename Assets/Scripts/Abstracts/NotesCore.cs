@@ -15,7 +15,7 @@ namespace Abstracts
 
         public abstract void OnActivate();
 
-        public abstract void OnPush();
+        protected abstract void OnPush();
         public bool Active { get; private set; } = false;
         public LaneName MyLane { get; private set; }
 
@@ -40,9 +40,5 @@ namespace Abstracts
         {
             OnPush();
         }
-        
-        public abstract class Factory : PlaceholderFactory<NotesCore>
-        {
-        };
     }
 }

@@ -22,7 +22,6 @@ namespace View
         public void SetJudge(string t,Color color)
         {
             _judgeResultText.text = t;
-            Debug.Log(color);
             _judgeResultText.color = color;
         }
     }

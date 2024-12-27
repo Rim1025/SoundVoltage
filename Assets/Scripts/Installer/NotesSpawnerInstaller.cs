@@ -8,9 +8,11 @@ namespace Installer
     {
         public override void InstallBindings()
         {
-            Container.Bind<INotesSpawner>()
+            Container
+                .Bind<INotesSpawner>()
                 .To<NotesSpawner>()
-                .AsSingle();
+                .AsSingle()
+                .NonLazy();
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Abstracts;
 using Model;
+using Zenject;
 
 namespace View.Notes
 {
@@ -7,7 +8,7 @@ namespace View.Notes
     {
         public override NotesType Type => NotesType.Normal;
         
-        public override void OnPush()
+        protected override void OnPush()
         {
             DeActivate();
         }

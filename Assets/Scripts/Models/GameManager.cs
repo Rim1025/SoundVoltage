@@ -27,7 +27,6 @@ namespace Model
         }
         private async void Start()
         {
-            _notesSpawner.Spawn(LaneName.OuterRight, NotesType.Normal);
             GameEvents _gameEvents = new GameEvents();
             await Task.Run(() => _gameEvents.GameStart());
 
@@ -39,7 +38,6 @@ namespace Model
                 })
                 .AddTo(this);
             // tesuto
-            Debug.Log(_status.MusicName);
             _judgeNotes.Judge(new Vector3(0,0,10));
             CsvSaver.Save(Application.dataPath + @"/Data/test.csv",new List<List<string>>());
             _notesSpawner.Spawn(LaneName.OuterRight,NotesType.Normal);

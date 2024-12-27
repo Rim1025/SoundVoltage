@@ -11,7 +11,8 @@ namespace Installer
             Container
                 .Bind<IScoreModel>()
                 .To<ScoreModel>()
-                .AsSingle();
+                .AsSingle()
+                .NonLazy();
         }
     }
 }

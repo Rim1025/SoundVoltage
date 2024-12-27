@@ -6,7 +6,7 @@ namespace Interfaces
 {
     public interface INotesSpawner
     {
-        public List<NotesCore> NotesList { get; }
-        public NotesCore Spawn(LaneName lane, NotesType type);
+        public List<INotes> NotesList { get; }
+        public INotes Spawn(LaneName lane, NotesType type);
     }
 }

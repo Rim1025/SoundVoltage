@@ -7,7 +7,7 @@ namespace View.Notes
     {
         public override NotesType Type => NotesType.Big;
 
-        public override void OnPush()
+        protected override void OnPush()
         {
             DeActivate();
         }

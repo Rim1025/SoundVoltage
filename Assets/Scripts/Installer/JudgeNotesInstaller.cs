@@ -11,7 +11,8 @@ namespace Installer
             Container
                 .Bind<IJudgeNotes>()
                 .To<JudgeNotes>()
-                .AsSingle();
+                .AsSingle()
+                .NonLazy();
         }
     }
 }
