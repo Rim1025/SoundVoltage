@@ -7,6 +7,6 @@ namespace Interfaces
     public interface INotesSpawner
     {
         public List<INotes> NotesList { get; }
-        public INotes Spawn(LaneName lane, NotesType type);
+        public INotes Spawn(LaneName lane, NotesType type,float speed);
     }
 }

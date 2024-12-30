@@ -7,7 +7,7 @@ namespace Interfaces
         public NotesType Type { get; }
         public bool Active { get;}
         public LaneName MyLane { get; }
-        public void Activate(LaneName laneName);
+        public void Activate(LaneName laneName,float speed);
         public void Push();
     }
 }

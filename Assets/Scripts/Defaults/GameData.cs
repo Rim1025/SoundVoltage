@@ -29,5 +29,7 @@ namespace Defaults
             { JudgeType.Good, new Color(1, 0.5647059f, 0.372549f) },
             { JudgeType.Miss, new Color(0.3686275f, 1, 0.8509804f) }
         };
+
+        public static readonly string MusicDataPath = Application.dataPath + @"\Data\MusicData.json";
     }
 }

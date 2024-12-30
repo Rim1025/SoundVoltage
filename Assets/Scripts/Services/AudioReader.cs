@@ -8,14 +8,14 @@ using System;
 
 namespace InGame.Audio
 {
-    public class AudioReader
+    public static class AudioReader
     {
         public static async Task<AudioClip> ReadAudio(string fileName)
         {
             fileName = fileName + ".mp3";
-            // Resourcesフォルダのパスを取得
+            // Dataフォルダのパスを取得
             string _dataPath = Application.dataPath + @"/Data";
-            // Resourcesフォルダ以下のすべてのファイルを取得
+            // dataフォルダ以下のすべてのファイルを取得
             string[] _files = System.IO.Directory.GetFiles(_dataPath, "*.mp3", SearchOption.AllDirectories);
             foreach (string _file in _files)
             {

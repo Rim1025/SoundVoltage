@@ -16,7 +16,7 @@ namespace Model
             _container = container;
             _objects = objects;
         }
-        public INotes Create(NotesType type, LaneName name)
+        public INotes Create(NotesType type)
         {
             if (!_objects.TryGetValue(type,out var _prefab))
             {
@@ -24,7 +24,6 @@ namespace Model
             }
 
             var _notes = _container.InstantiatePrefabForComponent<INotes>(_prefab);
-            _notes.Activate(name);
             
             return _notes;
         }
