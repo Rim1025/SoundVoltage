@@ -1,5 +1,6 @@
 ﻿using Model;
 using Zenject;
+using Interfaces;
 
 namespace Installer
 {
@@ -7,7 +8,8 @@ namespace Installer
     {
         public override void InstallBindings()
         {
-            Container.Bind<Lane>()
+            Container.Bind<ILane>()
+                .To<Lane>()
                 .AsSingle()
                 .NonLazy();
         }

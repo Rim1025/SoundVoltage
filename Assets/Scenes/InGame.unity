@@ -1301,6 +1301,7 @@ MonoBehaviour:
   _scoreText: {fileID: 2054217708}
   _comboText: {fileID: 1337172719}
   _judgeResultText: {fileID: 382336127}
+  _volume: {fileID: 963194229}
 --- !u!114 &1274491211
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1436,7 +1437,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _notesPrefabs:
-  - {fileID: 4101749264241252460, guid: 2f8f482e847f9b04eae757002753eb29, type: 3}
   - {fileID: 5835315451896061770, guid: bfd3b06df85688543b9c5b1b0d6e6895, type: 3}
 --- !u!114 &1297482171
 MonoBehaviour:

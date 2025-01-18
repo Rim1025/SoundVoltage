@@ -13,9 +13,9 @@ namespace Services
         /// </summary>
         /// <param name="filePath">パス</param>
         /// <returns>List<List<string>></returns>
-        public static List<List<int>> Read(string filePath)
+        public static List<List<string>> Read(string filePath)
         {
-            List<List<int>> _result = new List<List<int>>();
+            List<List<string>> _result = new ();
             try
             {
                 if (!File.Exists(filePath))
@@ -39,10 +39,8 @@ namespace Services
                     string _line;
                     while ((_line = _stream.ReadLine())!= null)
                     {
-                        _result.Add(_line.Split(',').Select(s => int.TryParse(s, out var n) ? n : ' ').ToList());
+                        _result.Add(_line.Split(',').ToList());
                     }
-                    // NOTE: 最初の一行に説明があるため
-                    
                 }
             }
             catch (Exception e)

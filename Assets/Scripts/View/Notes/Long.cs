@@ -12,7 +12,7 @@ namespace View.Notes
             DeActivate();
         }
 
-        public override void OnActivate()
+        public override void OnActivate(LaneName laneName,float speed)
         {
             
         }

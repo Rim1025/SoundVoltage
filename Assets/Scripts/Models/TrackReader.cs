@@ -7,7 +7,7 @@ namespace Model
 {
     public class TrackReader
     {
-        public static List<List<int>> Read(MusicStatus status)
+        public static List<List<string>> Read(MusicStatus status)
         {
             Debug.Log(status.MusicName);
             var fileName = status.MusicName + ".csv";

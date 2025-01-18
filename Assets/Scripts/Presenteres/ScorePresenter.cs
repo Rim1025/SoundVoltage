@@ -23,7 +23,8 @@ namespace Classes
             _score = score;
         }
 
-        private IDisposable _disposable;
+        private IDisposable _judgeDisposable;
+        private IDisposable _bloomDisposable;
         public void Start()
         {
             _score.Score.Subscribe(x =>
@@ -37,6 +38,7 @@ namespace Classes
             _score.JudgeResult.Subscribe(j =>
             {
                 SetJudgeResult(j,GameData.JudgeColors[j]);
+                SetBloom(j);
             });
         }
         
@@ -47,6 +49,7 @@ namespace Classes
 
         public void SetCombo(int combo)
         {
+            
             _viewer.SetCombo(combo == 0 ? "" : combo.ToString());
         }
 
@@ -54,13 +57,27 @@ namespace Classes
         {
             var _viewTime = 0f;
             _viewer.SetJudge(type.ToString(),color);
-            _disposable = GameEvents.UpdateGame
-                .Select(_=> _viewTime += Time.deltaTime)
-                .Where(_=>_viewTime > GameData.JudgeViewTime)
-                .Subscribe(_=>
+            _judgeDisposable = GameEvents.UpdateGame
+                .Select(_ => _viewTime += Time.deltaTime)
+                .Where(_ => _viewTime > GameData.JudgeViewTime)
+                .Subscribe(_ =>
                 {
-                    _viewer.SetJudge("",color);
-                    _disposable.Dispose();
+                    _viewer.SetJudge("", color);
+                    _judgeDisposable.Dispose();
+                });
+        }
+        
+        public void SetBloom(JudgeType type)
+        {
+            var _viewTime = 0f;
+            _viewer.SetBloom(GameData.JudgeBloom[type]);
+            _bloomDisposable = GameEvents.UpdateGame
+                .Select(_ => _viewTime += Time.deltaTime)
+                .Where(_ => _viewTime > GameData.BloomTime)
+                .Subscribe(_ =>
+                {
+                    _viewer.SetBloom(GameData.JudgeBloom[JudgeType.Miss]);
+                    _bloomDisposable.Dispose();
                 });
         }
     }

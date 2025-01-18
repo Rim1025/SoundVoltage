@@ -1,5 +1,6 @@
 ﻿using TMPro;
 using UnityEngine;
+using UnityEngine.Rendering.PostProcessing;
 
 namespace View
 {
@@ -8,6 +9,7 @@ namespace View
         [SerializeField] private TextMeshProUGUI _scoreText;
         [SerializeField] private TextMeshProUGUI _comboText;
         [SerializeField] private TextMeshProUGUI _judgeResultText;
+        [SerializeField] private PostProcessVolume _volume;
 
         public void SetScore(string t)
         {
@@ -23,6 +25,12 @@ namespace View
         {
             _judgeResultText.text = t;
             _judgeResultText.color = color;
+        }
+
+        public void SetBloom(float intensity)
+        {
+            if(_volume.profile.TryGetSettings(out Bloom _bloom))
+                _bloom.intensity.value = intensity;
         }
     }
 }
