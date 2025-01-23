@@ -16,15 +16,19 @@ namespace Model
             _container = container;
             _objects = objects;
         }
-        public INotes Create(NotesType type, LaneName name)
+        public INotes Create(NotesType type,Transform parent)
         {
             if (!_objects.TryGetValue(type,out var _prefab))
             {
                 Err.Err.ViewErr(type + "は登録されていません");
+                return null;
             }
 
             var _notes = _container.InstantiatePrefabForComponent<INotes>(_prefab);
-            _notes.Activate(name);
+            if (_notes is MonoBehaviour _monoBehaviour)
+            {
+                _monoBehaviour.transform.SetParent(parent);
+            }
             
             return _notes;
         }

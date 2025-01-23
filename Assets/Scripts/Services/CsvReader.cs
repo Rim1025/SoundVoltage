@@ -1,15 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using UnityEngine;
 
 namespace Services
 {
-    public class CsvReader
+    public static class CsvReader
     {
+        /// <summary>
+        /// Csvの読み込み
+        /// </summary>
+        /// <param name="filePath">パス</param>
+        /// <returns>List<List<string>></returns>
         public static List<List<string>> Read(string filePath)
         {
-            List<List<string>> _result = new List<List<string>>();
+            List<List<string>> _result = new ();
             try
             {
                 if (!File.Exists(filePath))
@@ -33,9 +39,7 @@ namespace Services
                     string _line;
                     while ((_line = _stream.ReadLine())!= null)
                     {
-                        string[] _val = _line.Split(',');
-                        _result.Add(new List<string>(_val));
-                        Debug.Log(new List<string>(_val));
+                        _result.Add(_line.Split(',').ToList());
                     }
                 }
             }

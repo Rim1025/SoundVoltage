@@ -1,19 +1,20 @@
 ﻿using System.Collections.Generic;
 using Interfaces;
 using UnityEngine;
+using System.Text.Json.Serialization;
 
 namespace Model
 {
-    public class MusicStatus: IMusicStatus
+    public class MusicStatus
     {
-        public string MusicName { get; }
-        public float DelayTime { get; }
-        public float NotesSpeed { get; }
-
-        public MusicStatus(string name, float time, float speed)
+        public string MusicName;
+        public float DelayPosition;
+        public float NotesSpeed;
+        
+        public MusicStatus(string name, float position, float speed)
         {
             MusicName = name;
-            DelayTime = time;
+            DelayPosition = position;
             NotesSpeed = speed;
         }
     }

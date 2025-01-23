@@ -13,17 +13,14 @@ namespace Model
 {
     public class GameManager: MonoBehaviour
     {
-        private INotesSpawner _notesSpawner;
-        private IMusicStatus _status;
-
         private IJudgeNotes _judgeNotes; // testo
+        private ILane _lane;
 
         [Inject]
-        public void Construct(IMusicStatus status,IJudgeNotes judgeNotes,INotesSpawner notesSpawner)
+        public void Construct(IJudgeNotes judgeNotes,ILane lane)
         {
-            _status = status;
             _judgeNotes = judgeNotes;// testo
-            _notesSpawner = notesSpawner;
+            _lane = lane;
         }
         private async void Start()
         {
@@ -38,10 +35,8 @@ namespace Model
                 })
                 .AddTo(this);
             // tesuto
-            _judgeNotes.Judge(new Vector3(0,0,10));
+            _judgeNotes.Judge(new Vector3(0,0,0));
             CsvSaver.Save(Application.dataPath + @"/Data/test.csv",new List<List<string>>());
-            _notesSpawner.Spawn(LaneName.OuterRight,NotesType.Normal);
-            _notesSpawner.Spawn(LaneName.BigLeft,NotesType.Big);
         }
     }
 }

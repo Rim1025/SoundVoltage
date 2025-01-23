@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Services
 {
-    public class CsvSaver
+    public static class CsvSaver
     {
         public static void Save(string filePath,List<List<string>> data)
         {

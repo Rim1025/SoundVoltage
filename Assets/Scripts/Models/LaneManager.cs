@@ -7,18 +7,17 @@ namespace Model
     public enum LaneName
     {
         OuterRight,
+        BigRight,
         InnerRight,
         InnerLeft,
+        BigLeft,
         OuterLeft,
-        BigRight,
-        BigLeft
     }
 
     public enum NotesType
     {
-        Normal,
-        Big,
-        Long
+        Normal = 1,
+        Long = 2
     }
     public class LaneManager
     {
