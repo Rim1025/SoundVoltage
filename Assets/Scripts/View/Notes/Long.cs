@@ -16,5 +16,10 @@ namespace View.Notes
         {
             
         }
+
+        protected override void OnDeActivate()
+        {
+            
+        }
     }
 }

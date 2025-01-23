@@ -30,5 +30,10 @@ namespace View.Notes
                 transform.localScale = GameData.NormalNotesScale;
             }
         }
+
+        protected override void OnDeActivate()
+        {
+            
+        }
     }
 }

@@ -1,15 +1,13 @@
 ﻿using Model;
 using Zenject;
-using Interfaces;
 
 namespace Installer
 {
-    public class LaneInstaller: MonoInstaller
+    public class NotesSpawnerInstaller: MonoInstaller
     {
         public override void InstallBindings()
         {
-            Container.Bind<ILane>()
-                .To<Lane>()
+            Container.Bind<NotesSpawner>()
                 .AsSingle()
                 .NonLazy();
         }

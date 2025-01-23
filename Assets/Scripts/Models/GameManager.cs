@@ -14,13 +14,11 @@ namespace Model
     public class GameManager: MonoBehaviour
     {
         private IJudgeNotes _judgeNotes; // testo
-        private ILane _lane;
 
         [Inject]
-        public void Construct(IJudgeNotes judgeNotes,ILane lane)
+        public void Construct(IJudgeNotes judgeNotes)
         {
             _judgeNotes = judgeNotes;// testo
-            _lane = lane;
         }
         private async void Start()
         {

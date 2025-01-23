@@ -16,8 +16,10 @@ namespace Model
 
     public enum NotesType
     {
+        End = 0,
         Normal = 1,
-        Long = 2
+        Long = 2,
+        LongEnd = 3
     }
     public class LaneManager
     {
