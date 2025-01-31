@@ -1,5 +1,4 @@
-﻿using Interfaces;
-using Model;
+﻿using Model;
 using Zenject;
 
 namespace Installer
@@ -8,9 +7,7 @@ namespace Installer
     {
         public override void InstallBindings()
         {
-            Container
-                .Bind<INotesSpawner>()
-                .To<NotesSpawner>()
+            Container.Bind<NotesSpawner>()
                 .AsSingle()
                 .NonLazy();
         }

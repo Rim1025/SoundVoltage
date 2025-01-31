@@ -8,5 +8,6 @@ namespace Interfaces
     {
         public IObservable<JudgeType> CalScore { get; }
         public void Judge(Vector3 position);
+        public void Judge(JudgeType type);
     }
 }

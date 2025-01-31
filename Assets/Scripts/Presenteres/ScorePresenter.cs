@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using View;
 using Defaults;
 using Interfaces;
@@ -23,7 +24,10 @@ namespace Classes
             _score = score;
         }
 
-        private IDisposable _disposable;
+        private List<IDisposable> _judgeDisposable = new();
+        private IDisposable _bloomDisposable;
+        private float _judgeViewTime = 0;
+        private float _bloomViewTime = 0;
         public void Start()
         {
             _score.Score.Subscribe(x =>
@@ -37,6 +41,7 @@ namespace Classes
             _score.JudgeResult.Subscribe(j =>
             {
                 SetJudgeResult(j,GameData.JudgeColors[j]);
+                SetBloom(j);
             });
         }
         
@@ -47,20 +52,40 @@ namespace Classes
 
         public void SetCombo(int combo)
         {
+            
             _viewer.SetCombo(combo == 0 ? "" : combo.ToString());
         }
 
         public void SetJudgeResult(JudgeType type,Color color)
         {
-            var _viewTime = 0f;
+            foreach (var _disposable in _judgeDisposable)
+            {
+                _disposable.Dispose();
+            }
+            _judgeViewTime = 0f;
             _viewer.SetJudge(type.ToString(),color);
-            _disposable = GameEvents.UpdateGame
-                .Select(_=> _viewTime += Time.deltaTime)
-                .Where(_=>_viewTime > GameData.JudgeViewTime)
-                .Subscribe(_=>
+            _judgeDisposable.Add(GameEvents.UpdateGame
+                .Select(t =>
                 {
-                    _viewer.SetJudge("",color);
-                    _disposable.Dispose();
+                    return _judgeViewTime += t;
+                })
+                .Where(_ => _judgeViewTime > GameData.JudgeViewTime)
+                .Subscribe(_ =>
+                {
+                    _viewer.SetJudge("", color);
+                }));
+        }
+        
+        public void SetBloom(JudgeType type)
+        {
+            _bloomViewTime = 0f;
+            _viewer.SetBloom(GameData.JudgeBloom[type]);
+            _bloomDisposable = GameEvents.UpdateGame
+                .Select(_ => _bloomViewTime += Time.deltaTime)
+                .Where(_ => _bloomViewTime > GameData.BloomTime)
+                .Subscribe(_ =>
+                {
+                    _viewer.SetBloom(GameData.JudgeBloom[JudgeType.Miss]);
                 });
         }
     }
