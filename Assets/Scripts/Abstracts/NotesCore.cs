@@ -11,15 +11,15 @@ namespace Abstracts
     public abstract class NotesCore: MonoBehaviour, INotes
     {
         private IDisposable _updateDisposable;
-        private MusicStatus _status;
+        protected MusicStatus _status;
         public abstract NotesType Type { get; }
-        public Vector3 Position => transform.position;
+        public Vector3 Position { get; protected set; }
         protected Material Material;//NOTE: 使うかも
 
         public abstract void OnActivate(LaneName laneName,float speed);
 
         protected abstract void OnPush();
-        protected abstract void OnDeActivate();
+        
         public bool Active
         {
             get => gameObject.activeSelf;
@@ -39,9 +39,11 @@ namespace Abstracts
             Active = true;
             MyLane = laneName;
             this.transform.position = GameData.LanePositions[laneName];
+            Position = transform.position;
             _updateDisposable = GameEvents.UpdateGame.Subscribe(t =>
             {
                 transform.position += Vector3.back * _status.NotesSpeed * t;
+                Position += Vector3.back * _status.NotesSpeed * t;
             });
         }
 

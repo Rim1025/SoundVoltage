@@ -43,7 +43,8 @@ namespace Model
         {
             INotes _bestNotes = null;
             foreach (var _notes in _getNotesPool.GetPool()
-                         .Where(n => n.Active && n.MyLane == lane && 
+                         .Where(n => n.Active && 
+                                     n.MyLane == lane &&
                                      Mathf.Abs(n.Position.z) < GameData.JudgePosition[(int)JudgeType.Miss]))
             {
                 if (_bestNotes != null)

@@ -1,9 +1,4 @@
-﻿using System.Collections.Generic;
-using Interfaces;
-using UnityEngine;
-using System.Text.Json.Serialization;
-
-namespace Model
+﻿namespace Model
 {
     [System.Serializable]
     public class MusicStatus

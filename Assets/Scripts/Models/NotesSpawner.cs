@@ -1,16 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security;
+using Abstracts;
+using Cysharp.Threading.Tasks;
 using Defaults;
 using Interfaces;
 using UnityEngine;
 using UniRx;
+using Unity.VisualScripting;
+using View.Notes;
 using Zenject;
+using Unit = UniRx.Unit;
 
 namespace Model
 {
     public class NotesSpawner
     {
+        private Subject<Unit> _startAudio = new();
+        public IObservable<Unit> StartAudio => _startAudio;
+        
         private List<List<string>> _notesList = new();
         
         private IAddNotesPool _addNotesPool;
@@ -22,11 +31,13 @@ namespace Model
 
         private INotes _endNotes;
         private IDisposable _updateDisposable;
+        private IDisposable _endDisposable;
         private int _bpm = GameData.Bpm;
-        private List<INotes> _spawningNotesList = new();
-        
+        private List<NotesCore> _spawningNotesList = new();
+
         [Inject]
-        public NotesSpawner(IAddNotesPool addNotesPool,IGetNotesPool getNotesPool,IJudgeNotes judge, NotesFactory factory,MusicStatus musicStatus)
+        public NotesSpawner(IAddNotesPool addNotesPool, IGetNotesPool getNotesPool, IJudgeNotes judge,
+            NotesFactory factory, MusicStatus musicStatus)
         {
             _addNotesPool = addNotesPool;
             _getNotesPool = getNotesPool;
@@ -37,38 +48,70 @@ namespace Model
             _notesList = TrackReader.Read(_status);
             //NOTE: 1行目は説明のため消す
             _notesList.RemoveAt(0);
-            
+            Debug.Log(_notesList.Count);
+
             float _time = 0;
             int _timeCounter = 0;
-            GameEvents.StartGame
-                .Subscribe(_ =>
-                {
-
-                });
-            _updateDisposable = GameEvents.UpdateGame
+            
+            if (!float.TryParse(_notesList[0][7], out var time))
+            {
+                time = 0;
+            }
+            float _audioTime = time - GameData.LanePositions[LaneName.OuterLeft].z / _status.NotesSpeed;
+            //NOTE: 講読後に実行するため
+            GameEvents.UpdateGame
                 .Select(t => _time += t)
-                .Where(_ => _time > (float)60 / _bpm)
+                .Where(t =>t > -_audioTime)
+                .First()
                 .Subscribe(_ =>
                 {
-                    _time -= (float)60 / _bpm;
-                    Spawn(_timeCounter);
-                    _timeCounter++;
-                    
-                    // 通り過ぎたときの処理
-                    foreach (var _notes in _getNotesPool.GetPool().Where(n => n.Position.z < -GameData.JudgePosition[^1] + _status.DelayPosition && n.Active))
-                    {
-                        _notes.Push();
-                        _judge.Judge(JudgeType.Miss);
-                    }
+                    _time = 0;
+                    _startAudio.OnNext(Unit.Default);
                 });
+            GameEvents.UpdateGame
+                .Select(t => _time += t)
+                .Where(t =>t > _audioTime)
+                .First()
+                .Subscribe(_ =>
+                {
+                    _time = 0;
+                    
+                    _updateDisposable = GameEvents.UpdateGame
+                        .Select(t => _time += t)
+                        .Where(_ => _time > (float)60 / _bpm)
+                        .Subscribe(_ =>
+                        {
+                            _time -= (float)60 / _bpm;
+                            CsvSpawn(_timeCounter);
+                            _timeCounter++;
+                            if (_endNotes != null&& _endNotes.Position.z < -GameData.JudgePosition[^1] + _status.DelayPosition && _endNotes.Active)
+                            {
+                                _endNotes.Push();
+                            }
+                            // 通り過ぎたときの処理
+                            foreach (var _notes in _getNotesPool.GetPool().Where(n =>
+                                         n.Position.z < -GameData.JudgePosition[^1] + _status.DelayPosition && n.Active))
+                            {
+                                _notes.Push();
+                                _judge.Judge(JudgeType.Miss);
+                            }
+                        });
+                });
+            
         }
         
         /// <summary>
         /// csvに基づいてノーツ生成
         /// </summary>
         /// <param name="time"></param>
-        private void Spawn(int time)
+        private void CsvSpawn(int time)
         {
+            if (_endNotes != null)
+            {
+                return;
+            }
+            
+            TimeNotesAction();
             _bpm = int.TryParse(_notesList[time][GameData.BpmLane], out var _result) ? _result : _bpm;
             foreach (var _notes in _notesList[time]
                          .Select((value, index) => new { value, index })
@@ -95,41 +138,85 @@ namespace Model
         /// <param name="type">ノーツの種類</param>
         /// <param name="status">MusicStatus</param>
         /// <returns>生成したノーツ</returns>
-        private INotes SpawnNotes(LaneName lane, NotesType type, MusicStatus status)
+        private NotesCore SpawnNotes(LaneName lane, NotesType type, MusicStatus status)
         {
-            foreach (var _n in _getNotesPool.GetPool())
+            if (SpawnNotesAction(lane,type, status))
             {
-                if (!_n.Active)
-                {
-                    _n.Activate(lane, status);
-                    return _n;
-                }
+                return null;
+            }
+            
+            foreach (var _n in _getNotesPool.GetPool().Where(n =>
+                     {
+                         //NOTE: Longノーツにノーマルノーツの挙動ができないため
+                         if (type == NotesType.Long)
+                         {
+                             return !n.Active && n.Type == NotesType.Long;
+                         }
+                         return !n.Active && n.Type != NotesType.Long;
+                     }))
+            {
+                _n.Activate(lane, status);
+                return _n;
             }
 
-            foreach (var _n in _spawningNotesList.Where(n => type == NotesType.LongEnd && n.MyLane == lane))
-            {
-                
-            }
 
             var _notes = _factory.Create(type, _notesParent.transform);
-            _addNotesPool.AddNotes(_notes);
             _notes.Activate(lane, status);
 
+            _addNotesPool.AddNotes(_notes);
+            return _notes;
+        }
+
+        private void TimeNotesAction()
+        {
+            foreach (var _n in _spawningNotesList
+                         .Select(n =>
+                         {
+                             n.TryGetComponent<ILongNotes>(out var _notes);
+                             return _notes;
+                         })
+                         .Where(n => n != null))
+            {
+                _n.Grow();
+            }
+        }
+
+        /// <summary>
+        /// ノーツ生成時の個別処理
+        /// </summary>
+        /// <param name="lane"></param>
+        /// <param name="type"></param>
+        /// <param name="status"></param>
+        /// <returns>処理中断かどうか</returns>
+        private bool SpawnNotesAction(LaneName lane,NotesType type,MusicStatus status)
+        {
+            var _endFlag = false;
+            _spawningNotesList.RemoveAll(n =>
+            {
+                var _longEnd = type == NotesType.LongEnd && n.MyLane == lane && n.TryGetComponent<ILongNotes>(out _);
+                if (type == NotesType.LongEnd)
+                {
+                    _endFlag = true;
+                }
+                return _longEnd;
+            });
+            
             // 曲終了時の処理
             if (type == NotesType.End)
             {
-                _endNotes = _notes;
-                _updateDisposable.Dispose();
-                _updateDisposable = GameEvents.UpdateGame
+                _endNotes = _factory.Create(NotesType.End, _notesParent.transform);
+                _endDisposable = GameEvents.UpdateGame
                     .Where(_ => !_endNotes.Active)
                     .Subscribe(_ =>
                     {
+                        Debug.Log("End");
                         _updateDisposable.Dispose();
-                        
+                        _endDisposable.Dispose();
                         // 終了処理
                     });
+                _endFlag = true;
             }
-            return _notes;
+            return _endFlag;
         }
     }
 }

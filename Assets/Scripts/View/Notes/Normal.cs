@@ -8,9 +8,10 @@ namespace View.Notes
 {
     public class Normal: NotesCore
     {
+        public override NotesType Type => NotesType.Normal;
+
         [SerializeField] private Material _normalMaterial;
         [SerializeField] private Material _bigMaterial;
-        public override NotesType Type => NotesType.Normal;
         
         protected override void OnPush()
         {
@@ -29,11 +30,6 @@ namespace View.Notes
                 Material = GetComponent<Renderer>().material = _normalMaterial;
                 transform.localScale = GameData.NormalNotesScale;
             }
-        }
-
-        protected override void OnDeActivate()
-        {
-            
         }
     }
 }

@@ -21,14 +21,4 @@ namespace Model
         Long = 2,
         LongEnd = 3
     }
-    public class LaneManager
-    {
-        public LaneManager()
-        {
-            GameEvents.StartGame
-                .Subscribe(_ =>
-                {
-                });
-        }
-    }
 }

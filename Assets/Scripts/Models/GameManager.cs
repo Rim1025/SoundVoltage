@@ -33,7 +33,7 @@ namespace Model
                 })
                 .AddTo(this);
             // tesuto
-            _judgeNotes.Judge(new Vector3(0,0,0));
+            //_judgeNotes.Judge(new Vector3(0,0,0));
             CsvSaver.Save(Application.dataPath + @"/Data/test.csv",new List<List<string>>());
         }
     }

@@ -1,7 +1,9 @@
-﻿namespace Interfaces
+﻿using Abstracts;
+
+namespace Interfaces
 {
     public interface IAddNotesPool
     {
-        public void AddNotes(INotes notes);
+        public void AddNotes(NotesCore notes);
     }
 }

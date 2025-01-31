@@ -5,16 +5,20 @@ using System.Collections;
 using UnityEngine.Networking;
 using System.Threading.Tasks;
 using System;
+using Cysharp.Threading.Tasks;
+using Defaults;
 
 namespace InGame.Audio
 {
-    public static class AudioReader
+    public class AudioReader
     {
-        public static async Task<AudioClip> ReadAudio(string fileName)
+        private AudioClip _audioClip;
+        
+        public async Task<AudioClip> ReadAudio(string fileName)
         {
             fileName = fileName + ".mp3";
             // Dataフォルダのパスを取得
-            string _dataPath = Application.dataPath + @"/Data";
+            string _dataPath = GameData.DataPath;
             // dataフォルダ以下のすべてのファイルを取得
             string[] _files = System.IO.Directory.GetFiles(_dataPath, "*.mp3", SearchOption.AllDirectories);
             foreach (string _file in _files)
@@ -25,7 +29,7 @@ namespace InGame.Audio
                     string _relativePath = GetRelativePath(_file, _dataPath);
                     if (_relativePath != null)
                     {
-                        AudioClip _audioClip = await LoadMp3AsAudioClipAsync(_file);
+                         _audioClip = await LoadMp3AsAudioClipAsync(_file);
                         return _audioClip;
                     }
                 }
@@ -35,7 +39,7 @@ namespace InGame.Audio
         }
         
         // 非同期でMP3をAudioClipに変換するメソッド
-        private static async Task<AudioClip> LoadMp3AsAudioClipAsync(string folderPath)
+        private async Task<AudioClip> LoadMp3AsAudioClipAsync(string folderPath)
         {
             if (!File.Exists(folderPath))
             {
@@ -61,6 +65,7 @@ namespace InGame.Audio
                 }
 
                 // AudioClipを取得
+                _audioClip = DownloadHandlerAudioClip.GetContent(_www);
                 return DownloadHandlerAudioClip.GetContent(_www);
             }
         }
@@ -68,7 +73,7 @@ namespace InGame.Audio
         /// <summary>
         /// Resourcesフォルダからの相対パスに変換
         /// </summary>
-        private static string GetRelativePath(string fullPath, string basePath)
+        private string GetRelativePath(string fullPath, string basePath)
         {
             if (fullPath.StartsWith(basePath))
                 return fullPath.Substring(basePath.Length + 1).Replace('\\', '/');
