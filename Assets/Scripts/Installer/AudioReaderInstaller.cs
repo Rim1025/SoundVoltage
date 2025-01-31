@@ -1,15 +1,13 @@
-﻿using Model;
+﻿using InGame.Audio;
 using Zenject;
-using Interfaces;
 
 namespace Installer
 {
-    public class LaneInstaller: MonoInstaller
+    public class AudioReaderInstaller: MonoInstaller
     {
         public override void InstallBindings()
         {
-            Container.Bind<ILane>()
-                .To<Lane>()
+            Container.Bind<AudioReader>()
                 .AsSingle()
                 .NonLazy();
         }

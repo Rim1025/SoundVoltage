@@ -43,5 +43,10 @@ namespace Model
             }
             _calScore.OnNext(_judge);
         }
+
+        public void Judge(JudgeType type)
+        {
+            _calScore.OnNext(type);
+        }
     }
 }

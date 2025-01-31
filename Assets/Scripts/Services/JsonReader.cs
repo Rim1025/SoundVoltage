@@ -13,6 +13,7 @@ namespace Services
             {
                 var _json = File.ReadAllText(GameData.MusicDataPath);
                 var _status = JsonUtility.FromJson<MusicStatus>(_json);
+                Debug.Log(_json);
                 return _status;
             }
 

@@ -16,7 +16,7 @@ namespace Model
             _container = container;
             _objects = objects;
         }
-        public INotes Create(NotesType type,Transform parent)
+        public NotesCore Create(NotesType type,Transform parent)
         {
             if (!_objects.TryGetValue(type,out var _prefab))
             {
@@ -24,7 +24,7 @@ namespace Model
                 return null;
             }
 
-            var _notes = _container.InstantiatePrefabForComponent<INotes>(_prefab);
+            var _notes = _container.InstantiatePrefabForComponent<NotesCore>(_prefab);
             if (_notes is MonoBehaviour _monoBehaviour)
             {
                 _monoBehaviour.transform.SetParent(parent);

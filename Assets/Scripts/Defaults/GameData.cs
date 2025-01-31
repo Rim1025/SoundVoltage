@@ -47,5 +47,6 @@ namespace Defaults
         public const int BpmLane = 6;
 
         public static readonly string MusicDataPath = Application.dataPath + @"\Data\MusicData.json";
+        public static readonly string DataPath = Application.dataPath + @"\Data";
     }
 }

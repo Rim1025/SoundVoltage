@@ -16,17 +16,9 @@ namespace Model
 
     public enum NotesType
     {
+        End = 0,
         Normal = 1,
-        Long = 2
-    }
-    public class LaneManager
-    {
-        public LaneManager()
-        {
-            GameEvents.StartGame
-                .Subscribe(_ =>
-                {
-                });
-        }
+        Long = 2,
+        LongEnd = 3
     }
 }
