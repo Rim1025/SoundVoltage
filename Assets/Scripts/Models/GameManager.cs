@@ -13,13 +13,6 @@ namespace Model
 {
     public class GameManager: MonoBehaviour
     {
-        private IJudgeNotes _judgeNotes; // testo
-
-        [Inject]
-        public void Construct(IJudgeNotes judgeNotes)
-        {
-            _judgeNotes = judgeNotes;// testo
-        }
         private async void Start()
         {
             GameEvents _gameEvents = new GameEvents();
@@ -32,9 +25,6 @@ namespace Model
                     _gameEvents.GameUpdate(t);
                 })
                 .AddTo(this);
-            // tesuto
-            //_judgeNotes.Judge(new Vector3(0,0,0));
-            CsvSaver.Save(Application.dataPath + @"/Data/test.csv",new List<List<string>>());
         }
     }
 }

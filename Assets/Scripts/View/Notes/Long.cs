@@ -10,6 +10,8 @@ namespace View.Notes
     public class Long: NotesCore,ILongNotes
     {
         public override NotesType Type => NotesType.Long;
+
+        public bool IsPushed { get; private set; } = false;
         
         [SerializeField] private Material _normalMaterial;
         [SerializeField] private Material _bigMaterial;
@@ -17,6 +19,10 @@ namespace View.Notes
         private List<float> _growLength = new();
         protected override void OnPush()
         {
+            if (!IsPushed)
+            {
+                IsPushed = true;
+            }
             if (_growLength.Count > 1)
             {
                 var _old = _growLength[^1];
@@ -40,13 +46,18 @@ namespace View.Notes
             transform.localScale = new Vector3(_tr.localScale.x, _tr.localScale.y, _length*1 / 10 + GameData.NormalNotesScale.z);
             transform.position = new Vector3(Position.x, Position.y, Position.z + _length / 2);
             _growLength.Add(_length);
-            //Debug.Log(_growLength.Count);
+        }
+
+        public void Miss()
+        {
+            DeActivate();
         }
 
         public override void OnActivate(LaneName laneName,float speed)
         {
             _growLength = new();
             _growLength.Add(0);
+            IsPushed = false;
             if (laneName is LaneName.BigRight or LaneName.BigLeft)
             {
                 Material = GetComponent<Renderer>().material = _bigMaterial;

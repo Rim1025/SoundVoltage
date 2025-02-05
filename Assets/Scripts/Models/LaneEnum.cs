@@ -16,7 +16,6 @@ namespace Model
 
     public enum NotesType
     {
-        End = 0,
         Normal = 1,
         Long = 2,
         LongEnd = 3

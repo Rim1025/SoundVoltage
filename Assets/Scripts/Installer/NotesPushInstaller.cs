@@ -1,12 +1,13 @@
-﻿using Zenject;
+﻿using Model;
+using Zenject;
 
 namespace Installer
 {
-    public class AudioReaderInstaller: MonoInstaller
+    public class NotesPushInstaller: MonoInstaller
     {
         public override void InstallBindings()
         {
-            Container.Bind<Mp3ToAudioClip>()
+            Container.Bind<NotesPush>()
                 .AsSingle()
                 .NonLazy();
         }

@@ -2,7 +2,7 @@
 using System.IO;
 using System.Threading.Tasks;
 using Defaults;
-using InGame.Audio;
+using Interfaces;
 using UnityEngine;
 using Zenject;
 using UniRx;
@@ -12,12 +12,11 @@ namespace Model
     public class AudioControl: MonoBehaviour
     {
         [SerializeField] private AudioSource _audioSource;
-        [SerializeField] private Mp3ToAudioClipConverter _audioClip;
-        private AudioReader _audioReader;
+        private Mp3ToAudioClip _audioReader;
         private MusicStatus _status;
-        private NotesSpawner _notesSpawner;
+        private INotesSpawner _notesSpawner;
         [Inject]
-        public void Construct(AudioReader audioReader,MusicStatus status,NotesSpawner spawner)
+        public void Construct(Mp3ToAudioClip audioReader,MusicStatus status,INotesSpawner spawner)
         {
             _audioReader = audioReader;
             _status = status;
@@ -27,7 +26,6 @@ namespace Model
 
         private async void Awake()
         {
-            //_audioSource.clip = _audioReader.ReadAudio(_status.MusicName).Result;
             var fileName = _status.MusicName + ".mp3";
             // Dataフォルダのパスを取得
             string _dataPath = GameData.DataPath;
@@ -41,7 +39,7 @@ namespace Model
                     string _relativePath = GetRelativePath(_file, _dataPath);
                     if (_relativePath != null)
                     {
-                        _audioSource.clip = await _audioClip.ConvertMp3ToAudioClip(@GameData.DataPath +"/" +_relativePath);
+                        _audioSource.clip = await _audioReader.Convert(@GameData.DataPath +"/" +_relativePath);
                     }
                 }
             }
@@ -57,7 +55,6 @@ namespace Model
 
         public void Play()
         {
-            Debug.Log("Play");
             _audioSource.Play();
         }
 

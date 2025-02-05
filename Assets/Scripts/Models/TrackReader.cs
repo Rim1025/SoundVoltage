@@ -11,7 +11,7 @@ namespace Model
         public static List<List<string>> Read(MusicStatus status)
         {
             Debug.Log(status.MusicName);
-            var fileName = status.MusicName + ".csv";
+            var _fileName = status.MusicName + ".csv";
             // Dataフォルダのパスを取得
             string _dataPath = Application.dataPath + @"/Data";
             // Dataフォルダ以下のすべてのファイルを取得
@@ -20,7 +20,7 @@ namespace Model
             foreach (string _file in _files)
             {
                 // ファイル名を比較
-                if (Path.GetFileName(_file) == fileName)
+                if (Path.GetFileName(_file) == _fileName)
                 {
                     return CsvReader.Read(_file);
                 }
