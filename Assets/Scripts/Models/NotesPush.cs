@@ -1,8 +1,11 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Abstracts;
 using Defaults;
 using Interfaces;
 using UnityEngine;
 using Zenject;
+using UniRx;
 
 namespace Model
 {
@@ -10,19 +13,76 @@ namespace Model
     {
         private IGetNotesPool _getNotesPool;
         private IJudgeNotes _judge;
+        private MusicStatus _status;
+
+        private Dictionary<LaneName, bool> _pushing = new()
+        {
+            { LaneName.OuterRight, false },
+            { LaneName.BigRight, false },
+            { LaneName.InnerRight, false },
+            { LaneName.InnerLeft, false },
+            { LaneName.BigLeft, false },
+            { LaneName.OuterLeft, false }
+        };
         
         [Inject]
-        public NotesPush(IGetNotesPool getNotesPool,IJudgeNotes judge)
+        public NotesPush(IGetNotesPool getNotesPool,IJudgeNotes judge,IInputProvider provider, MusicStatus status)
         {
             _getNotesPool = getNotesPool;
             _judge = judge;
+            _status = status;
+
+            provider.Push.Subscribe(lane => Push(lane));
+            provider.ExitPush.Subscribe(lane => ExitPush(lane));
+        }
+
+        public void Push(LaneName lane)
+        {
+            if (!_pushing[lane])
+            {
+                DownPush(lane);
+                _pushing[lane] = true;
+            }
+            else
+            {
+                Pushing(lane);
+            }
+        }
+
+        public void ExitPush(LaneName lane)
+        {
+            _pushing[lane] = false;
+            var _bestNotes = SearchPool(lane);
+            if (_bestNotes != null && _bestNotes.TryGetComponent<ILongNotes>(out var _long) && _long.IsPushed)
+            {
+                SearchMissNotes(lane,_bestNotes);
+                _judge.Judge(JudgeType.Miss);
+                _long.Miss();
+            }
+        }
+
+        /// <summary>
+        /// キーが押し続けられているときの処理
+        /// </summary>
+        /// <param name="lane"></param>
+        private void Pushing(LaneName lane)
+        {
+            var _bestNotes = SearchPool(lane);
+            if (_bestNotes != null &&
+                _bestNotes.Position.z < _status.DelayPosition &&
+                _bestNotes.TryGetComponent<ILongNotes>(out var _long) && _long.IsPushed)
+            {
+                SearchMissNotes(lane, _bestNotes);
+                _judge.Judge(JudgeType.Perfect);
+                _bestNotes.Push();
+            }
         }
         
         /// <summary>
         /// キーがおされたときの処理
         /// </summary>
         /// <param name="lane">どこのレーンが押されたか</param>
-        public void Push(LaneName lane)
+        private void DownPush(LaneName lane)
         {
             var _bestNotes = SearchPool(lane);
 
@@ -39,9 +99,9 @@ namespace Model
         /// </summary>
         /// <param name="lane">探索するレーン</param>
         /// <returns>結果</returns>
-        private INotes SearchPool(LaneName lane)
+        private NotesCore SearchPool(LaneName lane)
         {
-            INotes _bestNotes = null;
+            NotesCore _bestNotes = null;
             foreach (var _notes in _getNotesPool.GetPool()
                          .Where(n => n.Active && 
                                      n.MyLane == lane &&

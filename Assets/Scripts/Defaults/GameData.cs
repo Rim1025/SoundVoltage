@@ -38,8 +38,8 @@ namespace Defaults
 
         public static readonly Dictionary<JudgeType, float> JudgeBloom = new()
         {
-            { JudgeType.Perfect, 25 },
-            { JudgeType.Good, 10 },
+            { JudgeType.Perfect, 5 },
+            { JudgeType.Good, 5 },
             { JudgeType.Miss, 5 }
         };
 
@@ -48,5 +48,8 @@ namespace Defaults
 
         public static readonly string MusicDataPath = Application.dataPath + @"\Data\MusicData.json";
         public static readonly string DataPath = Application.dataPath + @"\Data";
+
+        public const string StartScene = "Start";
+        public const string InGameScene = "InGame";
     }
 }

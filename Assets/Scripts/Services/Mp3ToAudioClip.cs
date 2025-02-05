@@ -4,18 +4,18 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Networking;
 
-public class Mp3ToAudioClipConverter : MonoBehaviour
+public class Mp3ToAudioClip
 {
     /// <summary>
     /// MP3 ファイルを AudioClip に変換
     /// </summary>
     /// <param name="filePath">MP3ファイルのパス</param>
     /// <returns>変換された AudioClip</returns>
-    public async Task<AudioClip> ConvertMp3ToAudioClip(string filePath)
+    public async Task<AudioClip> Convert(string filePath)
     {
         if (!File.Exists(filePath))
         {
-            Debug.LogError($"[Mp3ToAudioClipConverter] 指定されたMP3ファイルが見つかりません: {filePath}");
+            Err.Err.ViewErr($"指定されたMP3ファイルが見つかりません: {filePath}");
             return null;
         }
 
@@ -31,18 +31,16 @@ public class Mp3ToAudioClipConverter : MonoBehaviour
 
             if (www.result != UnityWebRequest.Result.Success)
             {
-                Debug.LogError($"[Mp3ToAudioClipConverter] MP3のロードに失敗: {www.error}");
+                Err.Err.ViewErr("MP3のロードに失敗: {www.error}");
                 return null;
             }
 
             AudioClip audioClip = DownloadHandlerAudioClip.GetContent(www);
             if (audioClip == null)
             {
-                Debug.LogError("[Mp3ToAudioClipConverter] AudioClip の取得に失敗しました");
+                Err.Err.ViewErr("AudioClip の取得に失敗しました");
                 return null;
             }
-
-            Debug.Log($"[Mp3ToAudioClipConverter] MP3 のロード成功: {filePath}");
             return audioClip;
         }
     }

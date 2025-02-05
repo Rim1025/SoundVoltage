@@ -25,7 +25,7 @@ namespace Classes
         }
 
         private List<IDisposable> _judgeDisposable = new();
-        private IDisposable _bloomDisposable;
+        private List<IDisposable> _bloomDisposable = new();
         private float _judgeViewTime = 0;
         private float _bloomViewTime = 0;
         public void Start()
@@ -73,20 +73,26 @@ namespace Classes
                 .Subscribe(_ =>
                 {
                     _viewer.SetJudge("", color);
-                }));
+                })
+            );
         }
         
         public void SetBloom(JudgeType type)
         {
+            foreach (var _disposable in _bloomDisposable)
+            {
+                _disposable.Dispose();
+            }
             _bloomViewTime = 0f;
             _viewer.SetBloom(GameData.JudgeBloom[type]);
-            _bloomDisposable = GameEvents.UpdateGame
+            _bloomDisposable.Add(GameEvents.UpdateGame
                 .Select(_ => _bloomViewTime += Time.deltaTime)
                 .Where(_ => _bloomViewTime > GameData.BloomTime)
                 .Subscribe(_ =>
                 {
                     _viewer.SetBloom(GameData.JudgeBloom[JudgeType.Miss]);
-                });
+                })
+            );
         }
     }
 }
