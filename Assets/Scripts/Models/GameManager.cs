@@ -13,9 +13,15 @@ namespace Model
 {
     public class GameManager: MonoBehaviour
     {
+        private GameEvents _gameEvents;
+
+        private void Awake()
+        {
+            _gameEvents = new GameEvents();
+        }
+
         private async void Start()
         {
-            GameEvents _gameEvents = new GameEvents();
             await Task.Run(() => _gameEvents.GameStart());
 
             this.UpdateAsObservable()
@@ -25,6 +31,11 @@ namespace Model
                     _gameEvents.GameUpdate(t);
                 })
                 .AddTo(this);
+        }
+
+        private void OnDestroy()
+        {
+            _gameEvents.Complete();
         }
     }
 }

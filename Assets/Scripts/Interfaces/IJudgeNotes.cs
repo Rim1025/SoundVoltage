@@ -7,7 +7,7 @@ namespace Interfaces
     public interface IJudgeNotes
     {
         public IObservable<JudgeType> CalScore { get; }
-        public void Judge(Vector3 position);
-        public void Judge(JudgeType type);
+        public JudgeType Judge(Vector3 position);
+        public JudgeType Judge(JudgeType type);
     }
 }

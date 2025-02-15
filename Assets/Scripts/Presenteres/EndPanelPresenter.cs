@@ -5,7 +5,7 @@ using View;
 using Zenject;
 using UniRx;
 
-namespace Classes
+namespace Presenters
 {
     public class EndPanelPresenter: MonoBehaviour
     {

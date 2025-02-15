@@ -6,9 +6,10 @@ using Interfaces;
 using UniRx;
 using UnityEngine;
 using Model;
+using Services;
 using Zenject;
 
-namespace Classes
+namespace Presenters
 {
     /// <summary>
     /// スコアとコンボ数の管理
@@ -17,11 +18,13 @@ namespace Classes
     {
         [SerializeField] private ScoreViewer _viewer;
         private IScoreModel _score;
+        private MusicStatus _status;
 
         [Inject]
-        public void Construct(IScoreModel score)
+        public void Construct(IScoreModel score,MusicStatus status)
         {
             _score = score;
+            _status = status;
         }
 
         private List<IDisposable> _judgeDisposable = new();
@@ -84,13 +87,13 @@ namespace Classes
                 _disposable.Dispose();
             }
             _bloomViewTime = 0f;
-            _viewer.SetBloom(GameData.JudgeBloom[type]);
+            _viewer.SetBloom(GameData.JudgeBloom[type] * _status.Voltage);
             _bloomDisposable.Add(GameEvents.UpdateGame
                 .Select(_ => _bloomViewTime += Time.deltaTime)
                 .Where(_ => _bloomViewTime > GameData.BloomTime)
                 .Subscribe(_ =>
                 {
-                    _viewer.SetBloom(GameData.JudgeBloom[JudgeType.Miss]);
+                    _viewer.SetBloom(GameData.JudgeBloom[JudgeType.Miss] * _status.Voltage);
                 })
             );
         }
