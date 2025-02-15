@@ -31,6 +31,7 @@ namespace Services
         public KeyInput(List<KeyCode> keyCodes)
         {
             _keyCodes = keyCodes;
+            
             GameEvents.UpdateGame.Subscribe(_ =>
             {
                 foreach (var _key in _keyCodes

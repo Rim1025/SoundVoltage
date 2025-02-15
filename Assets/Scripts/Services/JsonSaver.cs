@@ -9,7 +9,7 @@ namespace Services
     {
         public static MusicStatus Save()
         {
-            var _status = new MusicStatus("FirstCreate", 0, 0);
+            var _status = new MusicStatus("FirstCreate", 0, 0,5);
             var _json = JsonUtility.ToJson(_status);
             File.WriteAllText(GameData.MusicDataPath, _json);
             return _status;

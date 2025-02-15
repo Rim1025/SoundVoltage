@@ -4,7 +4,7 @@ using Interfaces;
 using Model;
 using UnityEngine;
 using UniRx;
-using Zenject;
+using Services;
 
 namespace Abstracts
 {
