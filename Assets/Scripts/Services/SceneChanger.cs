@@ -3,8 +3,15 @@ using UnityEngine.SceneManagement;
 
 namespace Services
 {
+    /// <summary>
+    /// シーン遷移
+    /// </summary>
     public class SceneChanger
     {
+        /// <summary>
+        /// シーン遷移
+        /// </summary>
+        /// <param name="name">シーン名</param>
         public void Change(string name)
         {
             try

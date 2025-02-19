@@ -1,9 +1,11 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Networking;
 
+/// <summary>
+/// Mp3をAudioClipに変換
+/// </summary>
 public class Mp3ToAudioClip
 {
     /// <summary>

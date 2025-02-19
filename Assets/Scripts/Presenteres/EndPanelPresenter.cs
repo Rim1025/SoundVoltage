@@ -7,10 +7,14 @@ using UniRx;
 
 namespace Presenters
 {
+    /// <summary>
+    /// リザルト管理
+    /// </summary>
     public class EndPanelPresenter: MonoBehaviour
     {
         [SerializeField] private ResultViewer _viewer;
         private IScoreModel _score;
+        // 最大コンボ数記録
         private int _maxCombo = 0;
         
         [Inject]

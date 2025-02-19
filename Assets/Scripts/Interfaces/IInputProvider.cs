@@ -1,6 +1,5 @@
 ﻿using System;
 using Model;
-using UniRx;
 
 namespace Interfaces
 {

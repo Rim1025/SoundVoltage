@@ -6,18 +6,22 @@ using UnityEngine;
 
 namespace Services
 {
+    /// <summary>
+    /// csvの読み込み
+    /// </summary>
     public static class CsvReader
     {
         /// <summary>
-        /// Csvの読み込み
+        /// 読み込み
         /// </summary>
-        /// <param name="filePath">パス</param>
-        /// <returns>List<List<string>></returns>
+        /// <param name="filePath"></param>
+        /// <returns>2重のリスト形式</returns>
         public static List<List<string>> Read(string filePath)
         {
             List<List<string>> _result = new ();
             try
             {
+                // csvがない場合作成(作曲機能)
                 if (!File.Exists(filePath))
                 {
                     Err.Err.ViewErr("読み込み対象のscvファイルは存在しません\n空のファイルを作成します");
@@ -34,6 +38,8 @@ namespace Services
                         throw;
                     }
                 }
+                
+                // カンマ区切りcsvの読み込み
                 using (var _stream = new StreamReader(filePath))
                 {
                     string _line;

@@ -1,12 +1,14 @@
 ﻿using System;
 using System.IO.Ports;
 using UniRx;
-using UnityEngine;
 using System.Threading;
 using Model;
 
 namespace Serial
 {
+    /// <summary>
+    /// シリアル通信
+    /// </summary>
     public class GetSerial
     {
         public delegate void SerialDataReceivedEventHandler(string message);
@@ -14,7 +16,6 @@ namespace Serial
         public event SerialDataReceivedEventHandler OnDataReceived;
         
         private string _portName;
-        private SerialManager _manager;
         private int _baud;
         private SerialPort _port;
         
@@ -24,11 +25,10 @@ namespace Serial
         
         private Thread _thread;
         
-        public GetSerial(string portName, int baud, SerialManager manager)
+        public GetSerial(string portName, int baud)
         {
             _portName = portName;
             _baud = baud;
-            _manager = manager;
             Open();
         }
     
@@ -37,7 +37,9 @@ namespace Serial
             Close();
         }
         
-    
+        /// <summary>
+        /// 通信開始
+        /// </summary>
         private void Open()
         {
             _port = new SerialPort(_portName, _baud);
@@ -45,7 +47,6 @@ namespace Serial
             {
                 _port.Open();
                 _isRunning = true;
-                Debug.Log("通信開始");
 
                 _thread = new Thread(Read);
                 _thread.Start();
@@ -66,6 +67,9 @@ namespace Serial
             }
         }
     
+        /// <summary>
+        /// 通信終了
+        /// </summary>
         private void Close()
         {
             _isRunning = false;
@@ -76,10 +80,12 @@ namespace Serial
                     _port.Close();
                 }
                 _port.Dispose();
-                Debug.Log("通信終了");
             }
         }
     
+        /// <summary>
+        /// 通信内容読み込み
+        /// </summary>
         private void Read()
         {
             while (_isRunning&& _port != null && _port.IsOpen)
@@ -89,7 +95,7 @@ namespace Serial
                     _message = _port.ReadLine();
                     _isNewMessageReceived = true;
                 }
-                catch (System.Exception e)
+                catch (Exception e)
                 { 
                     Err.Err.ViewErr(e.Message);
                 }

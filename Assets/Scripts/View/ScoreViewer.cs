@@ -4,6 +4,9 @@ using UnityEngine.Rendering.PostProcessing;
 
 namespace View
 {
+    /// <summary>
+    /// スコア表示UI所持
+    /// </summary>
     public class ScoreViewer: MonoBehaviour
     {
         [SerializeField] private TextMeshProUGUI _scoreText;
@@ -11,22 +14,39 @@ namespace View
         [SerializeField] private TextMeshProUGUI _judgeResultText;
         [SerializeField] private PostProcessVolume _volume;
 
-        public void SetScore(string t)
+        /// <summary>
+        /// スコア表示
+        /// </summary>
+        /// <param name="text">スコア</param>
+        public void SetScore(string text)
         {
-            _scoreText.text = t;
+            _scoreText.text = text;
         }
         
-        public void SetCombo(string t)
+        /// <summary>
+        /// コンボ表示
+        /// </summary>
+        /// <param name="text">コンボ数</param>
+        public void SetCombo(string text)
         {
-            _comboText.text = t;
+            _comboText.text = text;
         }
 
-        public void SetJudge(string t,Color color)
+        /// <summary>
+        /// ジャッチ表示
+        /// </summary>
+        /// <param name="text">結果</param>
+        /// <param name="color">文字色</param>
+        public void SetJudge(string text,Color color)
         {
-            _judgeResultText.text = t;
+            _judgeResultText.text = text;
             _judgeResultText.color = color;
         }
 
+        /// <summary>
+        /// レーンの光量セット
+        /// </summary>
+        /// <param name="intensity">光量</param>
         public void SetBloom(float intensity)
         {
             if(_volume.profile.TryGetSettings(out Bloom _bloom))

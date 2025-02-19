@@ -8,6 +8,9 @@ using UniRx;
 
 namespace Serial
 {
+    /// <summary>
+    /// シリアル通信による処理
+    /// </summary>
     public class SerialManager: MonoBehaviour, IInputProvider
     {
         [SerializeField] private string _rightPortName;
@@ -29,8 +32,9 @@ namespace Serial
 
         private void Start()
         {
-            _leftSerial = new GetSerial(_leftPortName, _leftPortBand,this);
-            _rightSerial = new GetSerial(_rightPortName, _rightPortBand,this);
+            // シリアル通信開始
+            _leftSerial = new GetSerial(_leftPortName, _leftPortBand);
+            _rightSerial = new GetSerial(_rightPortName, _rightPortBand);
             
             _leftSerial.OnDataReceived += OnDataReceived;
             _rightSerial.OnDataReceived += OnDataReceived;
@@ -42,19 +46,28 @@ namespace Serial
             _rightSerial.OnDestroy();
         }
 
-        void OnDataReceived(string message)
+        /// <summary>
+        /// データ取得時処理
+        /// </summary>
+        /// <param name="message">データ</param>
+        private void OnDataReceived(string message)
         {
             var _text = int.TryParse(message, out var _result);
             if (!_text)
             {
                 return;
             }
+            //NOTE: 左右2台のマイコンと通信するため区別用フラグ
             bool _isLeft = false;
+            // リザルト保存
             var _resultNumber = new List<int>();
+            //NOTE: 8桁の値を通信
             for (int i = 0; i < 8; i++)
             {
+                // 1bitづつずらして読み取り
                 if (1 == (_result >> i & 0b1))
                 {
+                    //NOTE: ピンの刺す位置により変化するためswitch文を採用
                     switch (i)
                     {
                         case 0:
@@ -90,6 +103,7 @@ namespace Serial
                                 _resultNumber.Add(5);
                             }
                             break;
+                        //NOTE: 以下パーツ拡張時に使用可能性あり
                         case 4:
                         {
                             break;
@@ -106,11 +120,11 @@ namespace Serial
                         {
                             break;
                         }
-                            
                     }
                 }
             }
-
+            
+            // 離したとき検知用
             List<int> _oldResult;
             if (_isLeft)
             {
@@ -120,11 +134,14 @@ namespace Serial
             {
                 _oldResult = _oldRightResult;
             }
+            
+            // int->LaneName
             foreach (var _number in _resultNumber)
             {
                 _push.OnNext((LaneName)Enum.ToObject(typeof(LaneName),_number));
             }
-
+            
+            // 離した瞬間の検知
             foreach (var _old in _oldResult)
             {
                 var _pushing = false;
@@ -142,6 +159,7 @@ namespace Serial
                 }
             }
             
+            // 今回のリザルトを保存
             if (_isLeft)
             {
                 _oldLeftResult = _resultNumber;

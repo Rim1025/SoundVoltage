@@ -3,6 +3,9 @@ using Services;
 
 namespace Model
 {
+    /// <summary>
+    /// プレイヤーの設定する値を保存し、メインシーンへ
+    /// </summary>
     public class StatusSaver
     {
         private MusicSelect _select;
@@ -13,6 +16,9 @@ namespace Model
             _setting = setting;
         }
 
+        /// <summary>
+        /// MusicStatusを保存し、シーン遷移
+        /// </summary>
         public void ChangeScene()
         {
             MusicStatus _status = new MusicStatus(_select.MusicName.Value,

@@ -1,12 +1,18 @@
-﻿using Model;
-using System.IO;
+﻿using System.IO;
 using Defaults;
 using UnityEngine;
 
 namespace Services
 {
+    /// <summary>
+    /// jsonの読み込み
+    /// </summary>
     public static class JsonReader
     {
+        /// <summary>
+        /// MusicStatus読み込み
+        /// </summary>
+        /// <returns>結果</returns>
         public static MusicStatus Read()
         {
             if (File.Exists(GameData.MusicDataPath))
@@ -16,7 +22,7 @@ namespace Services
                 return _status;
             }
 
-            JsonSaver.Save();
+            JsonSaver.Create();
             return null;
         }
     }

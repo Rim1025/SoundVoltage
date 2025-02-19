@@ -26,9 +26,11 @@ namespace Presenters
             _score = score;
             _status = status;
         }
-
+        
+        // 表示中に再表示を行いたい場合のリスト
         private List<IDisposable> _judgeDisposable = new();
         private List<IDisposable> _bloomDisposable = new();
+        // 表示時間管理用
         private float _judgeViewTime = 0;
         private float _bloomViewTime = 0;
         public void Start()
@@ -44,27 +46,30 @@ namespace Presenters
             _score.JudgeResult.Subscribe(j =>
             {
                 SetJudgeResult(j,GameData.JudgeColors[j]);
+                // ジャッチ時に光らせる
                 SetBloom(j);
             });
         }
         
-        public void SetScore(float score)
+        private void SetScore(float score)
         {
             _viewer.SetScore(((int)score).ToString());
         }
 
-        public void SetCombo(int combo)
+        private void SetCombo(int combo)
         {
-            
+            // コンボ数が0なら表示しない
             _viewer.SetCombo(combo == 0 ? "" : combo.ToString());
         }
 
-        public void SetJudgeResult(JudgeType type,Color color)
+        private void SetJudgeResult(JudgeType type,Color color)
         {
+            // 今までの表示を消去
             foreach (var _disposable in _judgeDisposable)
             {
                 _disposable.Dispose();
             }
+            // 一定時間表示して消去
             _judgeViewTime = 0f;
             _viewer.SetJudge(type.ToString(),color);
             _judgeDisposable.Add(GameEvents.UpdateGame
@@ -80,17 +85,19 @@ namespace Presenters
             );
         }
         
-        public void SetBloom(JudgeType type)
+        private void SetBloom(JudgeType type)
         {
+            // 今までの光を消去
             foreach (var _disposable in _bloomDisposable)
             {
                 _disposable.Dispose();
             }
+            // 一定時間光らせてデフォルト値に
             _bloomViewTime = 0f;
             _viewer.SetBloom(GameData.JudgeBloom[type] * _status.Voltage);
             _bloomDisposable.Add(GameEvents.UpdateGame
                 .Select(_ => _bloomViewTime += Time.deltaTime)
-                .Where(_ => _bloomViewTime > GameData.BloomTime)
+                .Where(_ => _bloomViewTime > GameData.BloomViewTime)
                 .Subscribe(_ =>
                 {
                     _viewer.SetBloom(GameData.JudgeBloom[JudgeType.Miss] * _status.Voltage);

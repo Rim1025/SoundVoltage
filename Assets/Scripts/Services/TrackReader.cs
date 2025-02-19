@@ -1,16 +1,16 @@
 ﻿using System.Collections.Generic;
-using Services;
 using UnityEngine;
 using System.IO;
-using Interfaces;
 
-namespace Model
+namespace Services
 {
+    /// <summary>
+    /// csvファイルの探索、読み込み
+    /// </summary>
     public class TrackReader
     {
         public static List<List<string>> Read(MusicStatus status)
         {
-            Debug.Log(status.MusicName);
             var _fileName = status.MusicName + ".csv";
             // Dataフォルダのパスを取得
             string _dataPath = Application.dataPath + @"/Data";

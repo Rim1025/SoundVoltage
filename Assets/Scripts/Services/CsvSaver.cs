@@ -5,13 +5,21 @@ using UnityEngine;
 
 namespace Services
 {
+    /// <summary>
+    /// csv保存(作曲機能)
+    /// </summary>
     public static class CsvSaver
     {
+        /// <summary>
+        /// 保存
+        /// </summary>
+        /// <param name="filePath">パス</param>
+        /// <param name="data">内容(2重リスト形式)</param>
         public static void Save(string filePath,List<List<string>> data)
         {
-            Debug.Log("Save");
             try
             {
+                // ファイルがなければ生成
                 if (!File.Exists(filePath))
                 {
                     try
@@ -26,9 +34,9 @@ namespace Services
                         Err.Err.ViewErr($"ファイルの作成中にエラーが発生しました{e}");
                         throw;
                     }
-                    Err.Err.ViewErr("");
                 }
-
+                
+                // 書き込み(上書き)
                 using (var _stream = new StreamWriter(filePath,false))
                 {
                     var _csvData = ListToCsv(data);
@@ -41,6 +49,11 @@ namespace Services
             }
         }
 
+        /// <summary>
+        /// リストをカンマ区切りcsvに変換
+        /// </summary>
+        /// <param name="data">リスト</param>
+        /// <returns>カンマ区切りcsv</returns>
         private static string ListToCsv(List<List<string>> data)
         {
             var _builder = new System.Text.StringBuilder();

@@ -4,19 +4,34 @@ using Defaults;
 using Interfaces;
 using Services;
 using UniRx;
-using UnityEngine;
 using View;
 
 namespace Model
 {
+    /// <summary>
+    /// 曲設定選択
+    /// </summary>
     public class MusicSetting
     {
+        /// <summary>
+        /// 選択中の要素
+        /// </summary>
         public ReactiveProperty<StatusType> Type = new();
+        
+        /// <summary>
+        /// 設定要素
+        /// </summary>
         public ListMover<float> StatusValues;
+        
+        /// <summary>
+        /// 選択中の要素の値
+        /// </summary>
         public ReactiveProperty<float> SelectValue = new();
+        
         public MusicSetting(IInputProvider input,Canvases canvasChanger)
         {
             var _list = new List<float>();
+            // リストに値を設定する要素のを追加
             foreach (int _value in Enum.GetValues(typeof(StatusType)))
             {
                 _list.Add(GameData.StatusDefault[(StatusType)Enum.ToObject(typeof(StatusType), _value)]);
@@ -25,7 +40,9 @@ namespace Model
             StatusValues = new ListMover<float>(_list);
             SelectValue.Value = StatusValues.Selecting();
             
+            // 切り替え時間制限用
             var _valTime = 0f;
+            // 左側のキーで要素切り替え
             input.Push
                 .Where(lane => canvasChanger.Canvas[(int)CanvasType.Setting].activeSelf &&
                                _valTime <= 0 && lane is LaneName.InnerLeft or LaneName.OuterLeft)
@@ -40,7 +57,9 @@ namespace Model
                         _valTime = GameData.ButtonMoveDelay;
                     }
                 });
+            // 切り替え時間制限用
             var _typeTime = 0f;
+            // 右側のキーで要素の値を変更
             input.Push
                 .Where(lane => canvasChanger.Canvas[(int)CanvasType.Setting].activeSelf &&
                                _typeTime <= 0 && lane is LaneName.InnerRight or LaneName.OuterRight)
@@ -51,6 +70,8 @@ namespace Model
                     SelectValue.Value = StatusValues.Selecting();
                     _typeTime = GameData.ButtonMoveDelay;
                 });
+            
+            //切り替え時間制限
             input.Push
                 .Where(_=> canvasChanger.Canvas[(int)CanvasType.Setting].activeSelf)
                 .First()
