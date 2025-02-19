@@ -5,6 +5,9 @@ using Zenject;
 
 namespace Presenters
 {
+    /// <summary>
+    /// 曲選択テキスト管理
+    /// </summary>
     public class SelectButtonPresenter: MonoBehaviour
     {
         [SerializeField] private SelectMusicButton _button;

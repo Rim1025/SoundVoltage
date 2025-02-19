@@ -5,6 +5,9 @@ using UniRx;
 
 namespace Err
 {
+    /// <summary>
+    /// エラー用View
+    /// </summary>
     public class ErrViewer: MonoBehaviour
     {
         [SerializeField] private Text _text;

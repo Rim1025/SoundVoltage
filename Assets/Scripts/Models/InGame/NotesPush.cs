@@ -10,12 +10,18 @@ using UniRx;
 
 namespace Model
 {
+    /// <summary>
+    /// ノーツの入力に対する処理
+    /// </summary>
     public class NotesPush
     {
         private IGetNotesPool _getNotesPool;
         private IJudgeNotes _judge;
         private MusicStatus _status;
 
+        /// <summary>
+        /// 押されていたかの判定
+        /// </summary>
         private Dictionary<LaneName, bool> _pushing = new()
         {
             { LaneName.OuterRight, false },
@@ -33,11 +39,12 @@ namespace Model
             _judge = judge;
             _status = status;
 
+            // それぞれ講読
             provider.Push.Subscribe(lane => Push(lane));
             provider.ExitPush.Subscribe(lane => ExitPush(lane));
         }
 
-        public void Push(LaneName lane)
+        private void Push(LaneName lane)
         {
             if (!_pushing[lane])
             {
@@ -50,7 +57,7 @@ namespace Model
             }
         }
 
-        public void ExitPush(LaneName lane)
+        private void ExitPush(LaneName lane)
         {
             _pushing[lane] = false;
             var _bestNotes = SearchPool(lane);
@@ -85,18 +92,22 @@ namespace Model
         /// <param name="lane">どこのレーンが押されたか</param>
         private void DownPush(LaneName lane)
         {
+            // 最も良い判定を取得
             var _bestNotes = SearchPool(lane);
 
             if (_bestNotes != null)
             {
+                // 最も良い判定のノーツ以下のノーツをMissで処理
                 SearchMissNotes(lane,_bestNotes);
                 var _type = _judge.Judge(_bestNotes.Position);
+                // MissでかつLongならLongを終了
                 if (_type == JudgeType.Miss && _bestNotes.TryGetComponent<ILongNotes>(out var _long))
                 {
                     _long.Miss();
                 }
                 else
                 {
+                    // 押す
                     _bestNotes.Push();
                 }
             }
@@ -113,11 +124,12 @@ namespace Model
             foreach (var _notes in _getNotesPool.GetPool()
                          .Where(n => n.Active && 
                                      n.MyLane == lane &&
-                                     Mathf.Abs(n.Position.z) < GameData.JudgePosition[(int)JudgeType.Miss]))
+                                     Mathf.Abs(n.Position.z - _status.DelayPosition) < GameData.JudgePosition[JudgeType.Miss]))
             {
                 if (_bestNotes != null)
                 {
-                    if (Mathf.Abs(_notes.Position.z) < Mathf.Abs(_bestNotes.Position.z))
+                    // 判定調整分を差し引いたときに最も絶対値が小さいノーツを探索
+                    if (Mathf.Abs(_notes.Position.z - _status.DelayPosition) < Mathf.Abs(_bestNotes.Position.z - _status.DelayPosition))
                         _bestNotes = _notes;
                 }
                 else

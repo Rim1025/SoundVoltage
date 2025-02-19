@@ -13,22 +13,29 @@ namespace View.Notes
         [SerializeField] private Material _normalMaterial;
         [SerializeField] private Material _bigMaterial;
         
+        /// <summary>
+        /// 押された際の処理
+        /// </summary>
         protected override void OnPush()
         {
             DeActivate();
         }
 
-        public override void OnActivate(LaneName laneName,float speed)
+        /// <summary>
+        /// 生成又は再利用時の処理
+        /// </summary>
+        /// <param name="laneName">生成されるレーン</param>
+        /// <param name="speed">ノーツの速度</param>
+        protected override void OnActivate(LaneName laneName,float speed)
         {
-            if (laneName is LaneName.BigRight or LaneName.BigLeft)
+            transform.localScale = GameData.NotesScale[MyLane];
+            if (MyLane is LaneName.BigRight or LaneName.BigLeft)
             {
                 Material = GetComponent<Renderer>().material = _bigMaterial;
-                transform.localScale = GameData.BigNotesScale;
             }
             else
             {
                 Material = GetComponent<Renderer>().material = _normalMaterial;
-                transform.localScale = GameData.NormalNotesScale;
             }
         }
     }

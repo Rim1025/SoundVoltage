@@ -1,6 +1,5 @@
 ﻿using Defaults;
 using Interfaces;
-using Services;
 using UniRx;
 using UnityEngine;
 using View;
@@ -14,32 +13,34 @@ namespace Model
         Select,
         Setting
     }
+    
+    /// <summary>
+    /// キャンバス群を切り替え
+    /// </summary>
     public class CanvasChanger
     {
-        public ListMover<GameObject> SelectCanvas { get; private set; }
-
-        private Canvases _canvases;
-        private IInputProvider _input;
-
+        private ListMover<GameObject> SelectCanvas { get; }
+        
         [Inject]
         public CanvasChanger(Canvases canvases,IInputProvider input,StatusSaver statusSaver)
         {
-            _input = input;
-            _canvases = canvases;
-            SelectCanvas = new ListMover<GameObject>(_canvases.Canvas,false);
+            SelectCanvas = new ListMover<GameObject>(canvases.Canvas,false);
             
-            foreach (var _canvas in _canvases.Canvas)
+            foreach (var _canvas in canvases.Canvas)
             {
                 _canvas.gameObject.SetActive(false);
             }
             SelectCanvas.Selecting().gameObject.SetActive(true);
 
+            // 切り替え時間制限用
             float _time = 0;
-            _input.Push
+            // Bigボタンで切り替え
+            input.Push
                 .Where(lane => _time <= 0 && lane is LaneName.BigRight or LaneName.BigLeft)
                 .Subscribe(lane =>
                 {
-                    if (SelectCanvas.SelectingNumber() == _canvases.Canvas.Count - 1 && lane == LaneName.BigLeft)
+                    // Listの終端で更に移動するとシーン遷移
+                    if (SelectCanvas.SelectingNumber() == canvases.Canvas.Count - 1 && lane == LaneName.BigLeft)
                     {
                         statusSaver.ChangeScene();
                     }
@@ -48,7 +49,7 @@ namespace Model
                     SelectCanvas.Selecting().SetActive(true);
                     _time = GameData.ButtonMoveDelay;
                 });
-            _input.Push
+            input.Push
                 .First()
                 .Subscribe(_ =>
                 {

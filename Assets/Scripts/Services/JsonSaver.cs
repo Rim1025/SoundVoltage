@@ -1,13 +1,19 @@
 ﻿using System.IO;
 using Defaults;
-using Model;
 using UnityEngine;
 
 namespace Services
 {
+    /// <summary>
+    /// jsonの保存
+    /// </summary>
     public static class JsonSaver
     {
-        public static MusicStatus Save()
+        /// <summary>
+        /// MusicStatusの作成
+        /// </summary>
+        /// <returns></returns>
+        public static MusicStatus Create()
         {
             var _status = new MusicStatus("FirstCreate", 0, 0,5);
             var _json = JsonUtility.ToJson(_status);
@@ -15,6 +21,10 @@ namespace Services
             return _status;
         }
 
+        /// <summary>
+        /// MusicStatusの保存
+        /// </summary>
+        /// <param name="status"></param>
         public static void Save(MusicStatus status)
         {
             var _json = JsonUtility.ToJson(status);

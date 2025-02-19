@@ -3,8 +3,16 @@ using System.IO;
 
 namespace Services
 {
+    /// <summary>
+    /// フォルダ名を取得
+    /// </summary>
     public static class FolderNameGetter
     {
+        /// <summary>
+        /// 特定パス下全てのフォルダ名を取得
+        /// </summary>
+        /// <param name="path">パス</param>
+        /// <returns>フォルダ名リスト</returns>
         public static List<string> PathUnderAll(string path)
         {
             var _fileName = new List<string>();
@@ -12,10 +20,10 @@ namespace Services
             // ディレクトリが存在するか確認
             if (Directory.Exists(path))
             {
-                // ディレクトリ内のファイルを取得
+                // ディレクトリ内のフォルダを取得
                 string[] _files = Directory.GetDirectories(path);
 
-                // ファイル名のみをリストに追加
+                // フォルダ名のみをリストに追加
                 foreach (string _file in _files)
                 {
                     _fileName.Add(Path.GetFileName(_file));

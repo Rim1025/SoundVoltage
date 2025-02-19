@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using View;
-using Interfaces;
+﻿using System.Threading.Tasks;
 using UnityEngine;
 using UniRx;
 using UniRx.Triggers;
-using Zenject;
-using Services;
 
 namespace Model
 {
+    /// <summary>
+    /// イベントを実行
+    /// </summary>
     public class GameManager: MonoBehaviour
     {
         private GameEvents _gameEvents;
@@ -24,6 +21,7 @@ namespace Model
         {
             await Task.Run(() => _gameEvents.GameStart());
 
+            // 毎フレーム実行
             this.UpdateAsObservable()
                 .Select(_ => Time.deltaTime)
                 .Subscribe(t =>
@@ -35,6 +33,7 @@ namespace Model
 
         private void OnDestroy()
         {
+            // オブジェクト破壊時に終了
             _gameEvents.Complete();
         }
     }

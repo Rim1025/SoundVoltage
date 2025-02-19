@@ -6,18 +6,19 @@ using Zenject;
 
 namespace Model
 {
+    /// <summary>
+    /// ゲームシーンの終了
+    /// </summary>
     public class MusicEnd
     {
-        private IInputProvider _input;
         [Inject]
         public MusicEnd(IInputProvider input,IEndFlag endFlag)
         {
-            _input = input;
             endFlag.EndSubject
                 .First()
                 .Subscribe(_ =>
                 {
-                    _input.Push
+                    input.Push
                         .First()
                         .Subscribe(_ =>
                         {
