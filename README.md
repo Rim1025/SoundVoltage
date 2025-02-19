@@ -10,3 +10,6 @@ ProjectSettings -> Player -> OtherSettings -> ApiCompatibilityLevelが.NETFramew
   
 本来筐体とシリアル通信によって信号をやり取りするが
 IInputProviderのバインド先をKeyInputに変更することでPCのキーボードでも操作可能
+
+## 曲テンプレート
+https://drive.google.com/drive/folders/1l6ubLBY7NDxXCIXa-PEhVjF1UPGig7ui
