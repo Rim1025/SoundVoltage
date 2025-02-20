@@ -13,3 +13,4 @@ IInputProviderのバインド先をKeyInputに変更することでPCのキー�
 
 ## 曲テンプレート
 https://drive.google.com/drive/folders/1l6ubLBY7NDxXCIXa-PEhVjF1UPGig7ui
+上記のテンプレートにそったcsvを作成し、Dataフォルダ下に名前を統一したフォルダとmp3と一緒に入れれば完成
