@@ -24,9 +24,9 @@ namespace Model
         [Inject]
         public CanvasChanger(Canvases canvases,IInputProvider input,StatusSaver statusSaver)
         {
-            SelectCanvas = new ListMover<GameObject>(canvases.Canvas,false);
+            SelectCanvas = new ListMover<GameObject>(canvases.GetCanvases(),false);
             
-            foreach (var _canvas in canvases.Canvas)
+            foreach (var _canvas in canvases.GetCanvases())
             {
                 _canvas.gameObject.SetActive(false);
             }
@@ -40,7 +40,7 @@ namespace Model
                 .Subscribe(lane =>
                 {
                     // Listの終端で更に移動するとシーン遷移
-                    if (SelectCanvas.SelectingNumber() == canvases.Canvas.Count - 1 && lane == LaneName.BigLeft)
+                    if (SelectCanvas.SelectingNumber() == canvases.GetCanvases().Count - 1 && lane == LaneName.BigLeft)
                     {
                         statusSaver.ChangeScene();
                     }

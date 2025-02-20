@@ -982,6 +982,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _notesKeyCodes: 61000000640000006a0000006c000000730000006b000000
+  _serialManager: {fileID: 0}
 --- !u!114 &350438176
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3551,7 +3552,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: deb791a0acf04184a04635c145ac2a86, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Canvas:
+  _canvas:
   - {fileID: 1491887648}
   - {fileID: 1895419145}
   - {fileID: 1895799995}
@@ -3567,7 +3568,10 @@ Transform:
   m_LocalPosition: {x: 278.5, y: 156.6, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1491887652}
+  - {fileID: 1895419149}
+  - {fileID: 1895799999}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1414137062
@@ -4148,7 +4152,7 @@ RectTransform:
   m_Children:
   - {fileID: 1704085623}
   - {fileID: 1267693016}
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1409936517}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -5288,7 +5292,7 @@ RectTransform:
   - {fileID: 622579674}
   - {fileID: 1201832056}
   - {fileID: 1345925190}
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1409936517}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -5425,7 +5429,7 @@ RectTransform:
   - {fileID: 2040389980}
   - {fileID: 1464980479}
   - {fileID: 1450482195}
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1409936517}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -5814,9 +5818,6 @@ SceneRoots:
   - {fileID: 661604568}
   - {fileID: 670917953}
   - {fileID: 1233206162}
-  - {fileID: 1895419149}
-  - {fileID: 1895799999}
-  - {fileID: 1491887652}
   - {fileID: 890509797}
   - {fileID: 350438172}
   - {fileID: 173254716}

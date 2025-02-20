@@ -17,7 +17,7 @@ namespace Presenters
         {
             select.MusicName.Subscribe(t =>
             {
-                _button.Text.text = t;
+                _button.SetMusicName(t);
             });
         }
     }

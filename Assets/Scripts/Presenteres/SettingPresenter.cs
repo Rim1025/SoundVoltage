@@ -1,11 +1,9 @@
-﻿using Defaults;
-using Model;
+﻿using Model;
 using Services;
 using UnityEngine;
 using View;
 using Zenject;
 using UniRx;
-using UnityEngine.Rendering.PostProcessing;
 
 namespace Presenters
 {
@@ -22,17 +20,18 @@ namespace Presenters
             // 選択中にステータスタイプ
             setting.Type.Subscribe(t =>
             {
-                _viewer.TypeText.text = t.ToString();
+                _viewer.SetStatusType(t.ToString());
             });
             // ステータスの値
             setting.SelectValue.Subscribe(v =>
             {
-                if (setting.Type.Value == StatusType.Voltage && _viewer.Volume.profile.TryGetSettings<Bloom>(out var _bloom))
+                // Voltage選択中なら後ろのレーンの光り方を変更
+                if (setting.Type.Value == StatusType.Voltage)
                 {
-                    _bloom.intensity.value = GameData.JudgeBloom[JudgeType.Miss] * v;
+                    _viewer.SetBloom(v);
                 }
                 //NOTE: 小数点をカット
-                _viewer.ValueText.text = v.ToString("F1");
+                _viewer.SetStatusValue(v.ToString("F1"));
             });
         }
     }

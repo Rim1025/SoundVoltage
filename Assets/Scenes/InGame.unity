@@ -385,7 +385,7 @@ MonoBehaviour:
   _scoreText: {fileID: 770437330}
   _comboText: {fileID: 1525647947}
   _endPanel: {fileID: 198057835}
-  _playingActiveObject:
+  _notActiveInResultObject:
   - {fileID: 1274491208}
 --- !u!114 &198057838
 MonoBehaviour:
