@@ -28,7 +28,7 @@ namespace Model
             float _time = 0;
             // ボタンで移動
             _input.Push
-                .Where(lane => canvasChanger.Canvas[(int)CanvasType.Select].activeSelf &&
+                .Where(lane => canvasChanger.GetCanvases()[(int)CanvasType.Select].activeSelf &&
                                _time <= 0 && lane != LaneName.BigLeft && lane != LaneName.BigRight)
                 .Subscribe(lane =>
                 {
@@ -42,7 +42,7 @@ namespace Model
                 .Subscribe(_ =>
                 {
                     GameEvents.UpdateGame
-                        .Where(_ => canvasChanger.Canvas[(int)CanvasType.Select].activeSelf)
+                        .Where(_ => canvasChanger.GetCanvases()[(int)CanvasType.Select].activeSelf)
                         .Subscribe(t =>
                         {
                             _time -= t;

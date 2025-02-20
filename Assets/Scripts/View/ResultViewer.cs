@@ -1,5 +1,6 @@
 ﻿using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace View
 {
@@ -11,7 +12,7 @@ namespace View
         [SerializeField] private TextMeshProUGUI _scoreText;
         [SerializeField] private TextMeshProUGUI _comboText;
         [SerializeField] private GameObject _endPanel;
-        [SerializeField] private GameObject[] _playingActiveObject;
+        [SerializeField]private GameObject[] _notActiveInResultObject;
 
         private void Start()
         {
@@ -26,7 +27,8 @@ namespace View
         public void View(float score, int combo)
         {
             _endPanel.SetActive(true);
-            foreach (var _obj in _playingActiveObject)
+            // リザルト時非アクティブオブジェクトを非アクティブに
+            foreach (var _obj in _notActiveInResultObject)
             {
                 _obj.SetActive(false);
             }

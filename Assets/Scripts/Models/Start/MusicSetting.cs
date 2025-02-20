@@ -44,7 +44,7 @@ namespace Model
             var _valTime = 0f;
             // 左側のキーで要素切り替え
             input.Push
-                .Where(lane => canvasChanger.Canvas[(int)CanvasType.Setting].activeSelf &&
+                .Where(lane => canvasChanger.GetCanvases()[(int)CanvasType.Setting].activeSelf &&
                                _valTime <= 0 && lane is LaneName.InnerLeft or LaneName.OuterLeft)
                 .Subscribe(lane =>
                 {
@@ -61,7 +61,7 @@ namespace Model
             var _typeTime = 0f;
             // 右側のキーで要素の値を変更
             input.Push
-                .Where(lane => canvasChanger.Canvas[(int)CanvasType.Setting].activeSelf &&
+                .Where(lane => canvasChanger.GetCanvases()[(int)CanvasType.Setting].activeSelf &&
                                _typeTime <= 0 && lane is LaneName.InnerRight or LaneName.OuterRight)
                 .Subscribe(lane =>
                 {
@@ -73,7 +73,7 @@ namespace Model
             
             //切り替え時間制限
             input.Push
-                .Where(_=> canvasChanger.Canvas[(int)CanvasType.Setting].activeSelf)
+                .Where(_=> canvasChanger.GetCanvases()[(int)CanvasType.Setting].activeSelf)
                 .First()
                 .Subscribe(_ =>
                 {

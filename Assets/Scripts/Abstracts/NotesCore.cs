@@ -34,7 +34,7 @@ namespace Abstracts
         public bool Active
         {
             get => gameObject.activeSelf;
-            protected set => gameObject.SetActive(value);
+            private set => gameObject.SetActive(value);
         }
         
         // ノーツ独自の生成時処理

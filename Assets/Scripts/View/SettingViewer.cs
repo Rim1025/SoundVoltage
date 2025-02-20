@@ -1,6 +1,7 @@
 ﻿using TMPro;
 using UnityEngine;
 using UnityEngine.Rendering.PostProcessing;
+using UnityEngine.Serialization;
 
 namespace View
 {
@@ -9,17 +10,36 @@ namespace View
     /// </summary>
     public class SettingViewer: MonoBehaviour
     {
+        [SerializeField] private TextMeshProUGUI _typeText;
+        [SerializeField] private TextMeshProUGUI _valueText;
+        [SerializeField] private PostProcessVolume _volume;
+
         /// <summary>
-        /// 設定タイプ
+        /// 選択しているステータスのタイプをセット
         /// </summary>
-        public TextMeshProUGUI TypeText;
+        /// <param name="text">タイプ名</param>
+        public void SetStatusType(string text)
+        {
+            _typeText.text = text;
+        }
+
         /// <summary>
-        /// タイプの値
+        /// 選択しているステータスの値をセット
         /// </summary>
-        public TextMeshProUGUI ValueText;
+        /// <param name="text">値</param>
+        public void SetStatusValue(string text)
+        {
+            _valueText.text = text;
+        }
+        
         /// <summary>
-        /// 光量調節
+        /// レーンの光量セット
         /// </summary>
-        public PostProcessVolume Volume;
+        /// <param name="intensity">光量</param>
+        public void SetBloom(float intensity)
+        {
+            if(_volume.profile.TryGetSettings(out Bloom _bloom))
+                _bloom.intensity.value = intensity;
+        }
     }
 }

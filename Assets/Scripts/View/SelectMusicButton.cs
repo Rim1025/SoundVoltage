@@ -1,5 +1,6 @@
 ﻿using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Model
 {
@@ -8,9 +9,11 @@ namespace Model
     /// </summary>
     public class SelectMusicButton : MonoBehaviour
     {
-        /// <summary>
-        /// 曲選択UI
-        /// </summary>
-        public TextMeshProUGUI Text;
+        [SerializeField] private TextMeshProUGUI _musicNameText;
+
+        public void SetMusicName(string text)
+        {
+            _musicNameText.text = text;
+        }
     }
 }

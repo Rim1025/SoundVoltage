@@ -11,6 +11,11 @@ namespace View
         /// <summary>
         /// キャンバス群
         /// </summary>
-        public List<GameObject> Canvas;
+        [SerializeField] private List<GameObject> _canvas;
+
+        public List<GameObject> GetCanvases()
+        {
+            return _canvas;
+        }
     }
 }
