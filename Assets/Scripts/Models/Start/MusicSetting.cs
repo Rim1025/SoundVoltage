@@ -40,12 +40,11 @@ namespace Model
             StatusValues = new ListMover<float>(_list);
             SelectValue.Value = StatusValues.Selecting();
             
-            // 切り替え時間制限用
-            var _valTime = 0f;
             // 左側のキーで要素切り替え
             input.Push
-                .Where(lane => canvasChanger.GetCanvases()[(int)CanvasType.Setting].activeSelf &&
-                               _valTime <= 0 && lane is LaneName.InnerLeft or LaneName.OuterLeft)
+                .Where(lane => canvasChanger.GetCanvases()[(int)CanvasType.Setting].activeSelf && 
+                               lane is LaneName.InnerLeft or LaneName.OuterLeft)
+                .ThrottleFirst(TimeSpan.FromSeconds(GameData.ButtonMoveDelay))
                 .Subscribe(lane =>
                 {
                     var _val = StatusValues.Selecting() +
@@ -54,36 +53,18 @@ namespace Model
                     {
                         StatusValues.SetValue(_val);
                         SelectValue.Value = StatusValues.Selecting();
-                        _valTime = GameData.ButtonMoveDelay;
                     }
                 });
-            // 切り替え時間制限用
-            var _typeTime = 0f;
             // 右側のキーで要素の値を変更
             input.Push
                 .Where(lane => canvasChanger.GetCanvases()[(int)CanvasType.Setting].activeSelf &&
-                               _typeTime <= 0 && lane is LaneName.InnerRight or LaneName.OuterRight)
+                               lane is LaneName.InnerRight or LaneName.OuterRight)
+                .ThrottleFirst(TimeSpan.FromSeconds(GameData.ButtonMoveDelay))
                 .Subscribe(lane =>
                 {
                     StatusValues.Move(lane == LaneName.InnerRight ? -1 : 1);
                     Type.Value = (StatusType)Enum.ToObject(typeof(StatusType), StatusValues.SelectingNumber());
                     SelectValue.Value = StatusValues.Selecting();
-                    _typeTime = GameData.ButtonMoveDelay;
-                });
-            
-            //切り替え時間制限
-            input.Push
-                .Where(_=> canvasChanger.GetCanvases()[(int)CanvasType.Setting].activeSelf)
-                .First()
-                .Subscribe(_ =>
-                {
-                    GameEvents.UpdateGame
-                        .Where(_=>_valTime >=0 || _typeTime >= 0)
-                        .Subscribe(t =>
-                    {
-                        _valTime -= t;
-                        _typeTime -= t;
-                    });
                 });
         }
     }

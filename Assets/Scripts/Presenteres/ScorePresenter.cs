@@ -73,10 +73,7 @@ namespace Presenters
             _judgeViewTime = 0f;
             _viewer.SetJudge(type.ToString(),color);
             _judgeDisposable.Add(GameEvents.UpdateGame
-                .Select(t =>
-                {
-                    return _judgeViewTime += t;
-                })
+                .Select(t => _judgeViewTime += t)
                 .Where(_ => _judgeViewTime > GameData.JudgeViewTime)
                 .Subscribe(_ =>
                 {

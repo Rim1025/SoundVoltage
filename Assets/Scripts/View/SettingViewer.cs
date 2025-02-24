@@ -13,7 +13,9 @@ namespace View
         [SerializeField] private TextMeshProUGUI _typeText;
         [SerializeField] private TextMeshProUGUI _valueText;
         [SerializeField] private PostProcessVolume _volume;
-
+        [SerializeField] private RectTransform _typeTransform;
+        [SerializeField] private RectTransform _valueTransform;
+ 
         /// <summary>
         /// 選択しているステータスのタイプをセット
         /// </summary>
@@ -40,6 +42,16 @@ namespace View
         {
             if(_volume.profile.TryGetSettings(out Bloom _bloom))
                 _bloom.intensity.value = intensity;
+        }
+
+        public RectTransform GetTypeTransform()
+        {
+            return _typeTransform;
+        }
+
+        public RectTransform GetValueTransform()
+        {
+            return _valueTransform;
         }
     }
 }
