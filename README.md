@@ -16,5 +16,5 @@ https://drive.google.com/drive/folders/1l6ubLBY7NDxXCIXa-PEhVjF1UPGig7ui
 上記のテンプレートにそったcsvを作成し、Dataフォルダ下に名前を統一したフォルダとmp3と一緒に入れれば完成
 
 ## 作成者
-プログラム：柿野りむせ
+プログラム：柿野りむせ  
 楽曲作成につきましては多くのメンバーの協力の上で行っておりますが担当箇所が曖昧なため明記をしません
